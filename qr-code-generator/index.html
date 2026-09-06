@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free QR Code Generator — Turn Text or a Link Into a QR Code | SAAD</title>
+<meta name="description" content="Free QR code generator that runs entirely in your browser. Turn any link, wifi password, or note into a scannable, downloadable QR code — no sign-up, no data uploaded.">
+
+<!-- Meta keywords: ignored by Google and Bing since ~2009, kept only because a
+     few smaller/regional search engines still glance at it. Don't spend real
+     effort here — see the README for what actually affects ranking. -->
+<meta name="keywords" content="qr code generator, free qr code, create qr code, qr code maker, generate qr code online">
+
+<meta name="robots" content="index, follow">
+<meta name="author" content="SAAD">
+<!-- Replace with your real deployed URL once you have one (GitHub Pages / Netlify) -->
+<link rel="canonical" href="https://example.com/">
+
+<!-- Open Graph / social preview -->
+<meta property="og:title" content="Free QR Code Generator — SAAD">
+<meta property="og:description" content="Turn any text into a scannable QR code, right in your browser. No sign-up, nothing uploaded.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://example.com/">
+
+<!-- Twitter/X card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free QR Code Generator — SAAD">
+<meta name="twitter:description" content="Turn any text into a scannable QR code, right in your browser.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2216%22 fill=%22%2317181c%22/><rect x=%2222%22 y=%2222%22 width=%2222%22 height=%2222%22 fill=%22%23f6f5f0%22/><rect x=%2256%22 y=%2222%22 width=%2222%22 height=%2222%22 fill=%22%232546c9%22/><rect x=%2222%22 y=%2256%22 width=%2222%22 height=%2222%22 fill=%22%232546c9%22/></svg>">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SAAD QR Code Generator",
+  "url": "https://example.com/",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any (runs in browser)",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "description": "Free browser-based QR code generator. Turn any link, wifi password, or note into a downloadable QR code with no sign-up and no data uploaded."
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="site-head">
+    <span class="mark" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+    <span class="site-head__name">SAAD</span>
+    <span class="site-head__sep">/</span>
+    <span class="site-head__product">QR Code Generator</span>
+  </header>
+
+  <main class="ticket">
+
+    <!-- LEFT STUB: input + options -->
+    <section class="stub" aria-label="Code details">
+
+      <h1>Free QR code generator — turn anything into a code you can scan.</h1>
+      <p class="lede">Paste a link, a wifi password, a phone number. It's built right here — nothing leaves your browser.</p>
+
+      <label class="field">
+        <span class="field__label">Content</span>
+        <textarea id="text" rows="3" placeholder="https://example.com or any text"></textarea>
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field__label">Size</span>
+          <select id="size">
+            <option value="180">Small — 180px</option>
+            <option value="280" selected>Medium — 280px</option>
+            <option value="400">Large — 400px</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Correction</span>
+          <select id="correction">
+            <option value="L">Low</option>
+            <option value="M" selected>Medium</option>
+            <option value="Q">Quartile</option>
+            <option value="H">High</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label class="field field--color">
+          <span class="field__label">Code color</span>
+          <input type="color" id="colorDark" value="#17181c">
+        </label>
+        <label class="field field--color">
+          <span class="field__label">Background</span>
+          <input type="color" id="colorLight" value="#ffffff">
+        </label>
+      </div>
+
+      <button class="btn btn--primary" id="generate">Generate code</button>
+      <p class="error" id="error" hidden></p>
+
+      <div class="history" id="history-block" hidden>
+        <div class="history__head">
+          <span class="field__label">Recent</span>
+          <button class="btn btn--text" id="clear-history" type="button">Clear</button>
+        </div>
+        <ul class="history__list" id="history-list"></ul>
+      </div>
+
+    </section>
+
+    <!-- PERFORATION -->
+    <div class="perforation" aria-hidden="true"></div>
+
+    <!-- RIGHT PROOF: the QR preview -->
+    <section class="proof" aria-label="Generated code">
+      <div class="proof__frame">
+        <span class="finder finder--tr" aria-hidden="true"></span>
+        <span class="finder finder--bl" aria-hidden="true"></span>
+
+        <div id="qrcode" class="qrcode"></div>
+
+        <p class="proof__empty" id="empty-state">Nothing to scan yet.<br>Fill in the details and press generate.</p>
+      </div>
+
+      <div class="proof__actions" id="proof-actions" hidden>
+        <button class="btn btn--ghost" id="download">Download PNG</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Ad slot: replace this block with your ad network's snippet before publishing. -->
+  <aside class="ad-slot" id="ad-slot" aria-label="Advertisement">
+    <p>Ad space — see README for how to wire this up</p>
+  </aside>
+
+  <footer class="site-foot">
+    <p>Runs entirely in your browser. Nothing you type is uploaded anywhere.</p>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

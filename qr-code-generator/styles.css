@@ -1,0 +1,411 @@
+/* ---------------------------------------------------------
+   Tokens
+--------------------------------------------------------- */
+:root {
+  --paper: #f6f5f0;
+  --ink: #17181c;
+  --ink-soft: #55565c;
+  --line: #dedbd1;
+  --line-strong: #c7c3b6;
+  --blue: #2546c9;
+  --blue-ink: #16307d;
+  --red: #b23b3b;
+  --surface: #ffffff;
+
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  /* faint dot grid, nodding at the QR module grid without illustrating it literally */
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+/* ---------------------------------------------------------
+   Header
+--------------------------------------------------------- */
+.site-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.mark {
+  display: grid;
+  grid-template-columns: 7px 7px;
+  grid-template-rows: 7px 7px;
+  gap: 2px;
+  width: 16px;
+}
+.mark span { background: var(--ink); }
+.mark span:nth-child(2) { background: var(--blue); }
+.mark span:nth-child(3) { background: var(--blue); }
+.mark span:nth-child(4) { background: transparent; }
+
+.site-head__name {
+  color: var(--ink);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.site-head__sep { color: var(--line-strong); }
+
+/* ---------------------------------------------------------
+   Ticket layout
+--------------------------------------------------------- */
+.ticket {
+  display: grid;
+  grid-template-columns: 1.15fr auto 1fr;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.stub, .proof {
+  padding: 36px 34px;
+}
+
+.stub h1 {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0 0 12px;
+  max-width: 34ch;
+}
+
+.lede {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  max-width: 42ch;
+  margin: 0 0 28px;
+}
+
+/* ---------------------------------------------------------
+   Form fields
+--------------------------------------------------------- */
+.field {
+  display: block;
+  margin-bottom: 18px;
+}
+
+.field__label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+textarea, select {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+textarea:focus, select:focus, input[type="color"]:focus, button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field--color {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.field--color .field__label { margin: 0; }
+
+input[type="color"] {
+  width: 44px;
+  height: 30px;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--paper);
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------
+   Buttons
+--------------------------------------------------------- */
+.btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 11px 18px;
+}
+
+.btn--primary {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  margin-top: 6px;
+}
+.btn--primary:hover { background: var(--blue-ink); }
+.btn--primary:active { transform: translateY(1px); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn--ghost:hover { border-color: var(--ink); }
+
+.btn--text {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  padding: 0;
+  font-size: 12px;
+}
+.btn--text:hover { color: var(--red); }
+
+.error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+/* ---------------------------------------------------------
+   History
+--------------------------------------------------------- */
+.history { margin-top: 30px; }
+
+.history__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.history__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.history__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--line-strong);
+  font-size: 13.5px;
+}
+
+.history__list button.reuse {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 85%;
+  font-family: var(--sans);
+}
+.history__list button.reuse:hover { color: var(--blue-ink); text-decoration: underline; }
+
+.history__list button.remove {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+}
+.history__list button.remove:hover { color: var(--red); }
+
+/* ---------------------------------------------------------
+   Perforation between the two halves of the ticket
+--------------------------------------------------------- */
+.perforation {
+  width: 0;
+  border-left: 2px dashed var(--line-strong);
+  position: relative;
+}
+.perforation::before,
+.perforation::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  width: 16px;
+  height: 16px;
+  background: var(--paper);
+  border-radius: 50%;
+  border: 1px solid var(--line);
+}
+.perforation::before { top: -8px; }
+.perforation::after { bottom: -8px; }
+
+/* ---------------------------------------------------------
+   Proof panel (QR side)
+--------------------------------------------------------- */
+.proof {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.proof__frame {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.qrcode {
+  line-height: 0;
+  background: #fff;
+  padding: 0px;
+}
+.qrcode img, .qrcode canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+  width: auto !important;
+}
+
+.proof__empty {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: #8b8d97;
+  line-height: 1.6;
+  padding: 0 20px;
+}
+
+/* finder-pattern corner brackets, echoing the three squares a
+   scanner uses to lock onto a real QR code */
+.finder {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 3px solid var(--blue);
+  opacity: 0.9;
+}
+.finder--tl { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+.finder--tr { top: -6px; right: -6px; border-left: none; border-bottom: none; }
+.finder--bl { bottom: -6px; left: -6px; border-right: none; border-top: none; }
+
+.proof__actions {
+  display: flex;
+  gap: 10px;
+}
+.proof .btn--ghost {
+  color: var(--paper);
+  border-color: #45464e;
+}
+.proof .btn--ghost:hover { border-color: var(--paper); }
+
+/* ---------------------------------------------------------
+   Ad slot + footer
+--------------------------------------------------------- */
+.ad-slot {
+  margin-top: 28px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.site-foot {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+@media (max-width: 720px) {
+  .ticket {
+    grid-template-columns: 1fr;
+  }
+  .perforation {
+    width: auto;
+    height: 0;
+    border-left: none;
+    border-top: 2px dashed var(--line-strong);
+  }
+  .perforation::before, .perforation::after {
+    left: auto;
+    top: -8px;
+  }
+  .perforation::before { left: -8px; }
+  .perforation::after { right: -8px; left: auto; }
+  .stub, .proof { padding: 28px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
