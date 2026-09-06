@@ -376,7 +376,26 @@ input[type="color"] {
   font-size: 12px;
   color: var(--ink-soft);
 }
+.support {
+  margin-top: 28px;
+  text-align: center;
+}
 
+.support a {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+}
+
+.support a:hover {
+  border-color: var(--blue);
+  color: var(--blue-ink);
+}
 .site-foot {
   margin-top: 20px;
   text-align: center;
