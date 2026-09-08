@@ -16,7 +16,6 @@
   const emptyState = document.getElementById("empty-state");
   const proofActions = document.getElementById("proof-actions");
   const downloadBtn = document.getElementById("download");
-  const copyTextBtn = document.getElementById("copy-text");
   const historyBlock = document.getElementById("history-block");
   const historyList = document.getElementById("history-list");
   const clearHistoryBtn = document.getElementById("clear-history");
@@ -198,18 +197,6 @@
     a.remove();
   }
 
-  async function copyText() {
-    if (!currentText) return;
-    try {
-      await navigator.clipboard.writeText(currentText);
-      const original = copyTextBtn.textContent;
-      copyTextBtn.textContent = "Copied";
-      setTimeout(() => (copyTextBtn.textContent = original), 1400);
-    } catch (e) {
-      showError("Couldn't copy — your browser may be blocking clipboard access.");
-    }
-  }
-
   function handleLogoChange() {
     const file = logoEl.files && logoEl.files[0];
     if (file) {
@@ -228,7 +215,6 @@
 
   generateBtn.addEventListener("click", generate);
   downloadBtn.addEventListener("click", downloadPNG);
-  copyTextBtn.addEventListener("click", copyText);
   clearHistoryBtn.addEventListener("click", () => {
     saveHistory([]);
     renderHistory();
