@@ -165,6 +165,13 @@
         try {
           const img = await loadImageFile(logoEl.files[0]);
           drawLogoOnCanvas(canvas, img);
+          // qrcodejs snapshots the canvas into a visible <img> right after
+          // drawing the QR pattern, before we get a chance to add the logo.
+          // Refresh that snapshot so the on-screen preview matches the canvas.
+          const previewImg = qrcodeContainer.querySelector("img");
+          if (previewImg) {
+            previewImg.src = canvas.toDataURL("image/png");
+          }
         } catch (e) {
           showError("Couldn't load that logo file — try a different image.");
         }
