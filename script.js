@@ -7,6 +7,9 @@
   const correctionEl = document.getElementById("correction");
   const colorDarkEl = document.getElementById("colorDark");
   const colorLightEl = document.getElementById("colorLight");
+  const logoEl = document.getElementById("logo");
+  const logoNameEl = document.getElementById("logo-name");
+  const removeLogoBtn = document.getElementById("remove-logo");
   const generateBtn = document.getElementById("generate");
   const errorEl = document.getElementById("error");
   const qrcodeContainer = document.getElementById("qrcode");
@@ -22,6 +25,7 @@
 
   let currentQR = null;
   let currentText = "";
+  let previousCorrection = correctionEl.value;
 
   function showError(message) {
     if (!message) {
@@ -88,7 +92,40 @@
     });
   }
 
-  function generate() {
+  // Draws the chosen logo centered on top of the QR canvas, with a small
+  // white backdrop so the surrounding modules stay high-contrast and scannable.
+  function drawLogoOnCanvas(canvas, logoImg) {
+    const ctx = canvas.getContext("2d");
+    const qrSize = canvas.width;
+    const boxSize = Math.round(qrSize * 0.26);
+    const cx = qrSize / 2;
+    const cy = qrSize / 2;
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(cx - boxSize / 2, cy - boxSize / 2, boxSize, boxSize);
+
+    const inner = boxSize - 10;
+    const scale = Math.min(inner / logoImg.width, inner / logoImg.height);
+    const w = logoImg.width * scale;
+    const h = logoImg.height * scale;
+    ctx.drawImage(logoImg, cx - w / 2, cy - h / 2, w, h);
+  }
+
+  function loadImageFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Couldn't read that image."));
+        img.src = reader.result;
+      };
+      reader.onerror = () => reject(new Error("Couldn't read that file."));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function generate() {
     const text = textEl.value.trim();
     showError("");
 
@@ -98,7 +135,8 @@
     }
 
     const size = parseInt(sizeEl.value, 10);
-    const correction = correctionEl.value;
+    const hasLogo = logoEl.files && logoEl.files[0];
+    const correction = hasLogo ? "H" : correctionEl.value;
 
     qrcodeContainer.innerHTML = "";
 
@@ -112,8 +150,26 @@
         correctLevel: QRCode.CorrectLevel[CORRECT_LEVELS[correction]],
       });
     } catch (e) {
-      showError("That content is too long to encode at this size or correction level. Try shortening it, lowering the correction level, or increasing the size.");
+      showError(
+        hasLogo
+          ? "That content is too long to fit alongside a logo. Try shortening it or removing the logo."
+          : "That content is too long to encode at this size or correction level. Try shortening it, lowering the correction level, or increasing the size."
+      );
       return;
+    }
+
+    if (hasLogo) {
+      const canvas = qrcodeContainer.querySelector("canvas");
+      if (!canvas) {
+        showError("Your browser can't overlay a logo on this code, but the plain code above still works fine.");
+      } else {
+        try {
+          const img = await loadImageFile(logoEl.files[0]);
+          drawLogoOnCanvas(canvas, img);
+        } catch (e) {
+          showError("Couldn't load that logo file — try a different image.");
+        }
+      }
     }
 
     currentText = text;
@@ -154,12 +210,34 @@
     }
   }
 
+  function handleLogoChange() {
+    const file = logoEl.files && logoEl.files[0];
+    if (file) {
+      logoNameEl.textContent = file.name;
+      removeLogoBtn.hidden = false;
+      previousCorrection = correctionEl.value;
+      correctionEl.value = "H";
+      correctionEl.disabled = true;
+    } else {
+      logoNameEl.textContent = "No logo selected";
+      removeLogoBtn.hidden = true;
+      correctionEl.disabled = false;
+      correctionEl.value = previousCorrection;
+    }
+  }
+
   generateBtn.addEventListener("click", generate);
   downloadBtn.addEventListener("click", downloadPNG);
   copyTextBtn.addEventListener("click", copyText);
   clearHistoryBtn.addEventListener("click", () => {
     saveHistory([]);
     renderHistory();
+  });
+
+  logoEl.addEventListener("change", handleLogoChange);
+  removeLogoBtn.addEventListener("click", () => {
+    logoEl.value = "";
+    handleLogoChange();
   });
 
   textEl.addEventListener("keydown", (e) => {
