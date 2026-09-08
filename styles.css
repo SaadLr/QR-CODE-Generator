@@ -382,25 +382,36 @@ input[type="color"] {
 }
 
 .support a {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--mono);
-  font-size: 13px;
-  color: var(--ink);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #fff;
   text-decoration: none;
-  border: 1px solid var(--line-strong);
+  background: var(--blue);
+  border: 1px solid var(--blue);
   border-radius: var(--radius);
-  padding: 10px 20px;
+  padding: 12px 22px;
+  box-shadow: 0 2px 0 var(--blue-ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.support a::after {
+  content: "\2192";
 }
 
 .support a:hover {
-  border-color: var(--blue);
-  color: var(--blue-ink);
+  background: var(--blue-ink);
+  border-color: var(--blue-ink);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 var(--blue-ink);
 }
-.site-foot {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 12.5px;
-  color: var(--ink-soft);
+
+.support a:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 var(--blue-ink);
 }
 
 /* ---------------------------------------------------------
