@@ -109,7 +109,16 @@
           <input type="color" id="colorLight" value="#ffffff">
         </label>
       </div>
-
+     <div class="field">
+        <span class="field__label">Logo (optional)</span>
+        <div class="logo-row">
+          <input type="file" id="logo" accept="image/*" hidden>
+          <label for="logo" class="btn btn--ghost btn--small">Choose logo</label>
+          <span class="logo-row__name" id="logo-name">No logo selected</span>
+          <button type="button" class="btn btn--text" id="remove-logo" hidden>Remove</button>
+        </div>
+        <p class="field__hint">Square image works best. Correction level is bumped to High automatically so the code still scans with the center covered.</p>
+      </div>    
       <button class="btn btn--primary" id="generate">Generate code</button>
       <p class="error" id="error" hidden></p>
 
